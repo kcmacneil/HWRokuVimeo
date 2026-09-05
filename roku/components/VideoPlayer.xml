@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Full-screen playback using the native Video node.
+  `playback` is the /api/videos/{id}/play response; `meta` the ContentNode
+  from the catalog (title, artwork, etc.).
+-->
+<component name="VideoPlayer" extends="Group">
+  <interface>
+    <field id="playback" type="assocarray" />
+    <field id="meta" type="node" />
+    <field id="closed" type="boolean" alwaysNotify="true" />
+    <field id="errorMessage" type="string" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/components/VideoPlayer.brs" />
+  <children>
+    <Rectangle width="1920" height="1080" color="#000000" />
+    <Video id="video" width="1920" height="1080" enableUI="true" enableTrickPlay="true"
+           notificationInterval="1" />
+    <Group id="buffering" visible="false">
+      <BusySpinner id="spinner" translation="[912, 470]" spinInterval="1.6" />
+      <Label id="bufferingLabel" text="Loading video…" translation="[0, 590]" width="1920"
+             horizAlign="center" color="#E6E9EE" font="font:MediumSystemFont" />
+    </Group>
+  </children>
+</component>

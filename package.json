@@ -1,0 +1,18 @@
+{
+  "name": "hw-roku-vimeo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Roku SceneGraph channel + Vercel middleware for streaming a Vimeo library",
+  "scripts": {
+    "roku:lint": "bsc --project roku/bsconfig.json --create-package false",
+    "roku:package": "bsc --project roku/bsconfig.json",
+    "roku:deploy": "bsc --project roku/bsconfig.json --deploy --host $ROKU_DEV_TARGET --password $ROKU_DEV_PASSWORD",
+    "roku:images": "node roku/tools/gen-images.js",
+    "api:dev": "npm --prefix api run dev",
+    "api:test": "npm --prefix api test",
+    "api:lint": "npm --prefix api run lint && npm --prefix api run typecheck"
+  },
+  "devDependencies": {
+    "brighterscript": "^0.69.0"
+  }
+}

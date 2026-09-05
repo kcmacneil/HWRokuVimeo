@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Home: header + RowList.
+    Row 0  "Recently Added"  – latest videos
+    Row 1  "Browse"          – "All Videos" tile + one tile per category
+    Row 2+ one preview row per category (filled lazily by MainScene)
+-->
+<component name="HomeScreen" extends="Group">
+  <interface>
+    <field id="selectedVideo" type="node" alwaysNotify="true" />
+    <field id="selectedCategory" type="assocarray" alwaysNotify="true" />
+    <function name="setContent" />
+    <function name="setCategoryRow" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/components/HomeScreen.brs" />
+  <children>
+    <Poster id="hero" width="1920" height="540" translation="[0, 0]" loadDisplayMode="scaleToZoom" opacity="0.35" />
+    <Poster uri="pkg:/images/gradient.png" width="1920" height="540" />
+    <Poster id="logo" uri="pkg:/images/logo.png" width="72" height="72" translation="[96, 56]" />
+    <Label id="appTitle" text="HW Vimeo" translation="[186, 60]" color="#FFFFFF" font="font:LargeBoldSystemFont" />
+
+    <Group id="focusInfo" translation="[96, 190]">
+      <Label id="focusTitle" width="1200" color="#FFFFFF" font="font:LargeBoldSystemFont" maxLines="1" />
+      <Label id="focusMeta" translation="[0, 66]" color="#B7C0CC" font="font:MediumSystemFont" />
+      <Label id="focusDesc" translation="[0, 112]" width="1100" height="120" wrap="true" maxLines="3"
+             color="#D5DAE1" font="font:SmallSystemFont" />
+    </Group>
+
+    <RowList id="rows"
+             translation="[96, 400]"
+             itemComponentName="VideoCard"
+             numRows="2"
+             rowHeights="[300]"
+             itemSize="[1728, 300]"
+             rowItemSize="[[320, 240]]"
+             rowItemSpacing="[[24, 0]]"
+             itemSpacing="[0, 40]"
+             rowLabelOffset="[[0, 20]]"
+             showRowLabel="[true]"
+             rowFocusAnimationStyle="fixedFocusWrap"
+             focusXOffset="[0]"
+             rowLabelColor="#FFFFFF"
+             rowLabelFont="font:MediumBoldSystemFont"
+             drawFocusFeedback="false"
+             vertFocusAnimationStyle="fixedFocus" />
+
+    <Label id="emptyLabel" visible="false" text="No videos found in this Vimeo library yet."
+           translation="[0, 520]" width="1920" horizAlign="center" color="#B7C0CC" font="font:MediumSystemFont" />
+  </children>
+</component>

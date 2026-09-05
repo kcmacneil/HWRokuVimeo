@@ -1,0 +1,17 @@
+{
+  "rootDir": ".",
+  "files": [
+    "manifest",
+    "source/**/*",
+    "components/**/*",
+    "images/**/*"
+  ],
+  "stagingDir": "out/staging",
+  "createPackage": true,
+  "outFile": "out/HWVimeo.zip",
+  "retainStagingDir": false,
+  "autoImportComponentScript": false,
+  "diagnosticFilters": [
+    { "codes": [1001] }
+  ]
+}
