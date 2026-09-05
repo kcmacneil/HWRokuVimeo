@@ -80,12 +80,15 @@ function brand(w, h, withTitle) {
   });
 }
 
-brand(336, 210, "icon_focus_hd.png");
-brand(248, 140, "icon_focus_sd.png");
-brand(1280, 720, "splash_hd.png");
-brand(720, 480, "splash_sd.png");
-
-write("logo.png", 72, 72, (x, y) => (playGlyph(x, y, 36, 36, 34) ? [...ACCENT, 255] : [0, 0, 0, 0]));
+// Icons, splash and logo come from roku/branding via tools/brand-images.ps1.
+// Pass --placeholders to regenerate generic versions of those too.
+if (process.argv.includes("--placeholders")) {
+  brand(336, 210, "icon_focus_hd.png");
+  brand(248, 140, "icon_focus_sd.png");
+  brand(1280, 720, "splash_hd.png");
+  brand(720, 480, "splash_sd.png");
+  write("logo.png", 72, 72, (x, y) => (playGlyph(x, y, 36, 36, 34) ? [...ACCENT, 255] : [0, 0, 0, 0]));
+}
 
 write("spinner.png", 96, 96, (x, y) => {
   const dx = x - 48, dy = y - 48, d = Math.sqrt(dx * dx + dy * dy);
