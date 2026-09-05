@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component name="DetailsScreen" extends="Group">
+  <interface>
+    <field id="content" type="node" onChange="onContentChanged" />
+    <field id="playRequested" type="boolean" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/components/DetailsScreen.brs" />
+  <children>
+    <Poster id="backdrop" width="1920" height="1080" loadDisplayMode="scaleToZoom" opacity="0.25" />
+    <Poster uri="pkg:/images/gradient.png" width="1920" height="1080" />
+
+    <Rectangle color="#1C232B" width="800" height="450" translation="[96, 160]">
+      <Poster id="artwork" width="800" height="450" loadDisplayMode="scaleToZoom"
+              failedBitmapUri="pkg:/images/thumb_placeholder.png"
+              loadingBitmapUri="pkg:/images/thumb_placeholder.png" />
+    </Rectangle>
+
+    <Group translation="[960, 160]">
+      <Label id="title" width="860" wrap="true" maxLines="2" color="#FFFFFF" font="font:LargeBoldSystemFont" />
+      <Label id="meta" translation="[0, 120]" width="860" color="#B7C0CC" font="font:MediumSystemFont" />
+      <Label id="category" translation="[0, 164]" width="860" color="#4FA3FF" font="font:SmallSystemFont" />
+      <Label id="description" translation="[0, 220]" width="860" height="440" wrap="true" maxLines="12"
+             color="#D5DAE1" font="font:SmallSystemFont" lineSpacing="6" />
+    </Group>
+
+    <ButtonGroup id="buttons" translation="[96, 650]" minWidth="360" buttonHeight="72"
+                 textColor="#FFFFFF" iconUri="" focusedIconUri="" />
+
+    <Label id="hint" translation="[96, 980]" color="#6F7B88" font="font:SmallestSystemFont"
+           text="OK / Play to start · Back to return" />
+  </children>
+</component>

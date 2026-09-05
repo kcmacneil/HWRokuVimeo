@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Root scene. Owns the screen stack (Home -> Grid -> Details -> Player),
+  brokers all API calls through ApiTask and shows loading / error UI.
+  Screens never talk to the network themselves; they raise fields that the
+  scene observes and answers with content.
+-->
+<component name="MainScene" extends="Scene">
+  <interface>
+    <field id="launchArgs" type="assocarray" onChange="onLaunchArgs" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/components/MainScene.brs" />
+  <children>
+    <Rectangle id="background" width="1920" height="1080" color="#101418" />
+    <Group id="screens" />
+    <Group id="loading" visible="false">
+      <Rectangle width="1920" height="1080" color="#101418" opacity="0.6" />
+      <BusySpinner id="spinner" translation="[912, 470]" spinInterval="1.6" />
+      <Label id="loadingLabel" text="Loading…" translation="[0, 590]" width="1920" horizAlign="center"
+             color="#E6E9EE" font="font:MediumSystemFont" />
+    </Group>
+  </children>
+</component>

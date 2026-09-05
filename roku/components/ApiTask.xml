@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One-shot Task that performs a single HTTPS request against the middleware.
+  Set `request` then `control = "RUN"`; observe `response`.
+
+  request  = { path: "/videos", query: { page: "1" }, tag: "home" }
+  response = { ok: true/false, status: 200, data: <parsed json>, code: "NETWORK"|..., message: "", tag: "home" }
+-->
+<component name="ApiTask" extends="Task">
+  <interface>
+    <field id="request" type="assocarray" />
+    <field id="response" type="assocarray" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/components/ApiTask.brs" />
+</component>

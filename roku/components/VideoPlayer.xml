@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Full-screen playback using the native Video node.
+  `playback` is the /api/videos/{id}/play response; `meta` the ContentNode
+  from the catalog (title, artwork, etc.).
+-->
+<component name="VideoPlayer" extends="Group">
+  <interface>
+    <field id="playback" type="assocarray" />
+    <field id="meta" type="node" />
+    <!-- Catalog item to offer when this one ends; invalid disables autoplay. -->
+    <field id="nextItem" type="node" />
+    <!-- Set when the user accepts (or the countdown triggers) playing nextItem. -->
+    <field id="playNext" type="boolean" alwaysNotify="true" />
+    <field id="closed" type="boolean" alwaysNotify="true" />
+    <field id="errorMessage" type="string" alwaysNotify="true" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/config.brs" />
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/components/VideoPlayer.brs" />
+  <children>
+    <Rectangle width="1920" height="1080" color="#000000" />
+    <Video id="video" width="1920" height="1080" enableUI="true" enableTrickPlay="true"
+           notificationInterval="1" />
+    <Group id="buffering" visible="false">
+      <BusySpinner id="spinner" translation="[912, 470]" spinInterval="1.6" />
+      <Label id="bufferingLabel" text="Loading video…" translation="[0, 590]" width="1920"
+             horizAlign="center" color="#E6E9EE" font="font:MediumSystemFont" />
+    </Group>
+    <Group id="upNext" visible="false">
+      <Rectangle width="1920" height="1080" color="#000000" opacity="0.75" />
+      <Poster id="upNextPoster" translation="[560, 300]" width="480" height="270" loadDisplayMode="scaleToZoom" />
+      <Label text="Up next" translation="[1080, 300]" width="700" color="#9AA4B2" font="font:SmallestSystemFont" />
+      <Label id="upNextTitle" translation="[1080, 340]" width="700" maxLines="2" wrap="true"
+             color="#FFFFFF" font="font:LargeBoldSystemFont" />
+      <Label id="upNextMeta" translation="[1080, 450]" width="700" color="#9AA4B2" font="font:SmallSystemFont" />
+      <Label id="upNextCountdown" translation="[1080, 510]" width="700" color="#E6E9EE" font="font:MediumSystemFont" />
+      <Label text="OK  Play now        Back  Cancel" translation="[1080, 560]" width="700"
+             color="#9AA4B2" font="font:SmallSystemFont" />
+    </Group>
+    <Timer id="upNextTimer" duration="1" repeat="true" />
+  </children>
+</component>

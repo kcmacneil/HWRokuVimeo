@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Item renderer shared by the home RowList and the library MarkupGrid. -->
+<component name="VideoCard" extends="Group">
+  <interface>
+    <field id="itemContent" type="node" onChange="onContentChanged" />
+    <field id="focusPercent" type="float" onChange="onFocusChanged" />
+    <field id="width" type="float" value="320" onChange="onSizeChanged" />
+    <field id="height" type="float" value="240" onChange="onSizeChanged" />
+  </interface>
+  <script type="text/brightscript" uri="pkg:/source/utils.brs" />
+  <script type="text/brightscript" uri="pkg:/components/VideoCard.brs" />
+  <children>
+    <Rectangle id="focusRing" color="#4FA3FF" opacity="0" translation="[-6, -6]" width="332" height="192" />
+    <Rectangle id="frame" color="#1C232B" width="320" height="180">
+      <Poster id="poster" width="320" height="180" loadDisplayMode="scaleToZoom"
+              failedBitmapUri="pkg:/images/thumb_placeholder.png"
+              loadingBitmapUri="pkg:/images/thumb_placeholder.png" />
+    </Rectangle>
+    <Rectangle id="durationBg" color="#000000" opacity="0.7" width="76" height="30" translation="[236, 142]" visible="false">
+      <Label id="duration" width="76" height="30" horizAlign="center" vertAlign="center"
+             color="#FFFFFF" font="font:SmallestSystemFont" />
+    </Rectangle>
+    <Label id="title" translation="[0, 190]" width="320" height="46" wrap="true" maxLines="2"
+           color="#D5DAE1" font="font:SmallestSystemFont" />
+  </children>
+</component>
