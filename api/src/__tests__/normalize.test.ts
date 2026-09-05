@@ -47,6 +47,7 @@ describe("normalizeVideoDetails", () => {
     expect(d.privacy).toBe("unlisted");
     expect(d.playable).toBe(true);
     expect(normalizeVideoDetails({ ...rawVideo, status: "transcoding" }).playable).toBe(false);
+    expect(normalizeVideoDetails({ ...rawVideo, privacy: { view: "nobody" } }).playable).toBe(false);
   });
 });
 
@@ -57,6 +58,22 @@ describe("normalizeVideoPage", () => {
     const last = normalizeVideoPage(page([rawVideo], 3, 120, null));
     expect(last).toMatchObject({ hasMore: false, nextPage: null });
     expect(last.videos).toHaveLength(1);
+  });
+
+  it("drops videos that are still uploading or set to Private (view=nobody)", () => {
+    const p = normalizeVideoPage(
+      page(
+        [
+          rawVideo,
+          { ...rawVideo, uri: "/videos/2", status: "uploading_error" },
+          { ...rawVideo, uri: "/videos/3", privacy: { view: "nobody" } },
+        ],
+        1,
+        3,
+        null,
+      ),
+    );
+    expect(p.videos.map((v) => v.id)).toEqual(["123456789"]);
   });
 });
 

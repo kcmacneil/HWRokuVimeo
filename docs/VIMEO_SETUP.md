@@ -50,6 +50,12 @@ library:
 Avoid **Password** privacy unless you want to manage passwords elsewhere; the API still
 returns links for the token owner but Vimeo may restrict them in the future.
 
+**Private ("Only me", API `privacy.view = nobody`) videos do not play.** Vimeo returns HLS/MP4
+links for them, but the CDN answers 404. Verified against a live account. The middleware
+therefore hides such videos from `/api/videos` (along with uploads that are still processing or
+failed) and answers `/play` with `VIDEO_RESTRICTED`. Switch them to **Hide from Vimeo** or
+**Unlisted** to make them appear on Roku.
+
 ## 6. Configure environment variables
 
 Local development – create `api/.env` (git-ignored):
@@ -95,6 +101,7 @@ within `CACHE_TTL_SECONDS`.
 | --- | --- |
 | `VIMEO_AUTH_FAILED` from `/api/health?deep=1` | Token wrong, revoked, or pasted with whitespace. Regenerate. |
 | `/api/videos` works but `/play` gives `NO_STREAM` | Plan lacks file access or token lacks `video_files`. Check `LOG_LEVEL=debug` output: `hasPlay:false,hasFiles:false`. |
-| `VIDEO_RESTRICTED` for some videos | Video privacy prevents the token owner from viewing (team-owned/private link). |
+| `VIDEO_RESTRICTED` for some videos | Video is set to Private/"Only me" (or team-owned). Change privacy to Hide from Vimeo / Unlisted. |
+| Some videos missing from `/api/videos` | They are Private, still processing, or had an upload error; they are filtered out because they cannot play. |
 | `VIMEO_RATE_LIMITED` | Too many requests; increase `CACHE_TTL_SECONDS`. |
 | Folders missing | Token needs `private` scope; team folders require the token owner to be a member. |

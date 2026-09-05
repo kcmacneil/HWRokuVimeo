@@ -25,9 +25,9 @@ const ACCEPT = "application/vnd.vimeo.*+json;version=3.4";
 
 // Ask Vimeo for only what we need; keeps payloads small on large libraries.
 const LIST_FIELDS =
-  "uri,name,description,duration,created_time,release_time,pictures.sizes,tags.name,parent_folder.name";
-const DETAIL_FIELDS = `${LIST_FIELDS},privacy.view,status`;
-const PLAY_FIELDS = "uri,name,status,play,files";
+  "uri,name,description,duration,created_time,release_time,pictures.sizes,tags.name,parent_folder.name,privacy.view,status";
+const DETAIL_FIELDS = LIST_FIELDS;
+const PLAY_FIELDS = "uri,name,status,privacy.view,play,files";
 
 const metaCache = new TtlCache<unknown>(config.cacheTtlSeconds * 1000);
 
@@ -202,6 +202,13 @@ export class VimeoService {
     ]);
     if (raw.status && raw.status !== "available") {
       throw new ApiError(409, "VIDEO_UNAVAILABLE", "This video is still processing or unavailable.");
+    }
+    if (raw.privacy?.view === "nobody") {
+      throw new ApiError(
+        403,
+        "VIDEO_RESTRICTED",
+        "This video is set to Private on Vimeo. Change its privacy to Unlisted or Hide from Vimeo to allow playback.",
+      );
     }
     const info = selectStream(raw, tracks?.data ?? []);
     if (!info) {

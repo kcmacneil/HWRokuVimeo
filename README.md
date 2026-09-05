@@ -177,16 +177,16 @@ validation, error mapping, caching, and the no-cache rule for playback URLs).
 
 | # | Requirement | Status |
 | --- | --- | --- |
-| 1 | Backend authenticates with Vimeo | Implemented (`/api/health?deep=1`); needs your `VIMEO_ACCESS_TOKEN` to verify live |
-| 2 | `/api/videos` returns Vimeo library metadata | Implemented + tested against a Vimeo API stub; needs token for live check |
+| 1 | Backend authenticates with Vimeo | **Verified live** (`/api/health?deep=1` → `live_premium` account) |
+| 2 | `/api/videos` returns Vimeo library metadata | **Verified live** (1,200+ videos, folders + showcase, pagination, per-folder filtering) |
 | 3 | Roku app loads catalog from backend | Implemented (`ApiTask` → `MainScene.loadHome`) |
 | 4 | Home screen shows thumbnails and titles | Implemented (`HomeScreen` RowList + `VideoCard`) |
 | 5 | Remote navigation | Implemented (RowList/MarkupGrid/ButtonGroup focus, visible focus ring) |
 | 6 | Selecting a video opens details | Implemented (`DetailsScreen`) |
-| 7 | Play retrieves a fresh stream URL | Implemented (`/api/videos/:id/play`, no-store, never cached) |
-| 8 | `Video` node plays Vimeo HLS | Implemented; requires a Vimeo plan that exposes HLS links; not yet verified on a physical Roku |
+| 7 | Play retrieves a fresh stream URL | **Verified live** (`/play` returns an HLS `.m3u8` that the Vimeo CDN serves; `no-store`, never cached) |
+| 8 | `Video` node plays Vimeo HLS | Implemented; stream URL verified reachable; playback not yet verified on a physical Roku |
 | 9 | Back button returns cleanly | Implemented (screen stack in `MainScene`) |
 | 10 | Graceful errors | Implemented (error codes → friendly dialogs with Retry; player error handling) |
 
-Items 1, 2, 8 need real credentials/hardware to flip to "verified" – see the STATUS summary in
-the PR description.
+Items 3–6, 8–10 need a Roku device to flip to "verified" – see the STATUS summary in the PR
+description.

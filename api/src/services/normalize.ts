@@ -194,8 +194,18 @@ export function normalizeVideoSummary(v: VimeoVideo, categoryName: string | null
   };
 }
 
+/**
+ * Vimeo only issues working playback links for finished uploads whose privacy
+ * is not "nobody" ("Private" in the Vimeo UI); everything else 404s at the CDN.
+ */
+export function isPlayable(v: VimeoVideo): boolean {
+  const statusOk = v.status === undefined || v.status === "available";
+  const privacyOk = v.privacy?.view === undefined || v.privacy.view !== "nobody";
+  return statusOk && privacyOk;
+}
+
 export function normalizeVideoDetails(v: VimeoVideo, categoryName: string | null = null): VideoDetails {
-  const playable = v.status === undefined || v.status === "available";
+  const playable = isPlayable(v);
   return {
     ...normalizeVideoSummary(v, categoryName),
     privacy: v.privacy?.view ?? null,
@@ -210,7 +220,7 @@ export function normalizeVideoPage(
 ): PagedVideos {
   const hasMore = page.paging?.next != null;
   return {
-    videos: page.data.map((v) => normalizeVideoSummary(v, categoryName)),
+    videos: page.data.filter(isPlayable).map((v) => normalizeVideoSummary(v, categoryName)),
     page: page.page,
     perPage: page.per_page,
     total: page.total,
