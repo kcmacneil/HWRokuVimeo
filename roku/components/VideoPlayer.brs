@@ -10,6 +10,11 @@ sub init()
     m.video.observeField("position", "onPosition")
     m.top.observeField("visible", "onVisible")
     m.top.observeField("playback", "onPlaybackSet")
+    m.cfg = AppConfig()
+    m.upNext = m.top.findNode("upNext")
+    m.upNextTimer = m.top.findNode("upNextTimer")
+    m.upNextTimer.observeField("fire", "onUpNextTick")
+    m.countdown = 0
     m.startedAt = invalid
     m.lastPosition = 0
 end sub
@@ -72,7 +77,11 @@ sub onStateChanged()
     else if state = "paused" then
         setBuffering(false)
     else if state = "finished" then
-        closePlayer()
+        if m.cfg.AUTOPLAY_NEXT = true and m.top.nextItem <> invalid then
+            showUpNext()
+        else
+            closePlayer()
+        end if
     else if state = "error" then
         code = m.video.errorCode
         msg = m.video.errorMsg
@@ -114,8 +123,55 @@ sub fail(message as string)
 end sub
 
 sub closePlayer()
+    m.upNextTimer.control = "stop"
     m.video.control = "stop"
     m.top.closed = true
+end sub
+
+' ---------------------------------------------------------------------------
+' Autoplay next
+' ---------------------------------------------------------------------------
+
+sub showUpNext()
+    nextItem = m.top.nextItem
+    m.video.control = "stop"
+    setBuffering(false)
+    m.top.findNode("upNextTitle").text = nextItem.title
+    m.top.findNode("upNextMeta").text = nextItem.shortDescriptionLine2
+    poster = m.top.findNode("upNextPoster")
+    if nextItem.hdPosterUrl <> "" then
+        poster.uri = nextItem.hdPosterUrl
+    else
+        poster.uri = "pkg:/images/thumb_placeholder.png"
+    end if
+    m.countdown = m.cfg.AUTOPLAY_COUNTDOWN_SECONDS
+    if m.countdown <= 0 then
+        acceptUpNext()
+        return
+    end if
+    updateCountdownLabel()
+    m.upNext.visible = true
+    m.upNext.setFocus(true)
+    m.upNextTimer.control = "start"
+end sub
+
+sub onUpNextTick()
+    m.countdown = m.countdown - 1
+    if m.countdown <= 0 then
+        acceptUpNext()
+    else
+        updateCountdownLabel()
+    end if
+end sub
+
+sub updateCountdownLabel()
+    m.top.findNode("upNextCountdown").text = "Playing in " + m.countdown.toStr() + "s"
+end sub
+
+sub acceptUpNext()
+    m.upNextTimer.control = "stop"
+    m.upNext.visible = false
+    m.top.playNext = true
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
@@ -123,6 +179,13 @@ function onKeyEvent(key as string, press as boolean) as boolean
     if key = "back" then
         closePlayer()
         return true
+    end if
+    if m.upNext.visible then
+        if key = "OK" or key = "play" then
+            acceptUpNext()
+            return true
+        end if
+        return true ' swallow other keys while the prompt is up
     end if
     ' play/pause, rewind, fast forward and OK (trick play bar) are handled natively by the Video node.
     return false

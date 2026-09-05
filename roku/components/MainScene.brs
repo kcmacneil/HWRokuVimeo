@@ -238,9 +238,44 @@ sub onPlayback(res as object, item as object)
     player = CreateObject("roSGNode", "VideoPlayer")
     player.playback = res.data
     player.meta = item
+    player.nextItem = nextVideoAfter(item)
     player.observeField("closed", "onPlayerClosed")
+    player.observeField("playNext", "onPlayNext")
     player.observeField("errorMessage", "onPlayerError")
     pushScreen(player)
+end sub
+
+' The video that follows `item` in the row/grid it was picked from (catalog
+' ContentNodes stay parented to their row), skipping non-video tiles.
+function nextVideoAfter(item as object) as object
+    row = item.getParent()
+    if row = invalid then return invalid
+    found = false
+    for i = 0 to row.getChildCount() - 1
+        child = row.getChild(i)
+        if found then
+            if child.isCategory <> true and child.id <> "" then return child
+        else if child.isSameNode(item) then
+            found = true
+        end if
+    end for
+    return invalid
+end function
+
+' Autoplay: swap the player for the next video and keep the Details screen
+' underneath in sync so Back lands on the video that is actually playing.
+sub onPlayNext(event as object)
+    if not event.getData() then return
+    player = event.getRoSGNode()
+    nextItem = player.nextItem
+    if nextItem = invalid then
+        popScreen()
+        return
+    end if
+    popScreen()
+    details = m.stack.peek()
+    if details <> invalid and details.subtype() = "DetailsScreen" then details.content = nextItem
+    startPlayback(nextItem)
 end sub
 
 sub onPlayerClosed(event as object)

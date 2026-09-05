@@ -140,6 +140,10 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). In short:
 * **`HomeScreen`** (RowList: Recently Added / Browse tiles / per-category rows),
   **`VideoGrid`** (MarkupGrid with infinite paging), **`DetailsScreen`**, **`VideoPlayer`**
   (native `Video` node, dynamic `ContentNode`, HLS, error/finish handling, captions plumbing).
+* **Autoplay next** – when a video ends the player shows an "Up next" card for the following
+  video in the same row/collection with a countdown (OK plays now, Back cancels) and then
+  fetches a fresh stream for it. Tune/disable via `AUTOPLAY_NEXT` and
+  `AUTOPLAY_COUNTDOWN_SECONDS` in `roku/source/config.brs`.
 
 ## Security
 
