@@ -24,7 +24,7 @@ developer password.
 Edit `roku/source/config.brs`:
 
 ```brightscript
-API_BASE_URL: "https://<your-project>.vercel.app/api"
+API_BASE_URL: "https://hw-roku-vimeo-api.vercel.app/api"   ' current production deployment
 API_KEY: ""      ' or the same value as the server's API_KEY
 ```
 

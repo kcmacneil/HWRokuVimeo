@@ -2,7 +2,7 @@
 ' Change API_BASE_URL to your deployed backend (no trailing slash).
 function AppConfig() as object
     return {
-        API_BASE_URL: "https://YOUR-PROJECT.vercel.app/api"
+        API_BASE_URL: "https://hw-roku-vimeo-api.vercel.app/api"
         ' Optional shared secret; must match API_KEY on the backend. Leave "" to disable.
         API_KEY: ""
         ' Videos requested per page from the middleware.

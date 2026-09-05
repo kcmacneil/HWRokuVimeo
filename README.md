@@ -41,6 +41,12 @@ npm run lint && npm run typecheck
 
 ### 3. Deploy the API to Vercel
 
+**Current production deployment:** `https://hw-roku-vimeo-api.vercel.app/api`
+(Vercel project `hw-roku-vimeo-api`, team `kcmacn-8344s-projects`). Redeploy with
+`cd api && npx vercel --prod`.
+
+To deploy a fresh project:
+
 ```bash
 cd api
 npx vercel login
@@ -60,8 +66,8 @@ Verify: `https://<project>.vercel.app/api/health?deep=1` should return
 
 ### 4. Point the Roku app at the API and sideload it
 
-1. Edit `roku/source/config.brs` → `API_BASE_URL: "https://<project>.vercel.app/api"`
-   (and `API_KEY` if you set one on the server).
+1. `roku/source/config.brs` already points at the production API above; change `API_BASE_URL`
+   if you deploy elsewhere (and `API_KEY` if you set one on the server).
 2. Package: `npm install` (repo root) then `npm run roku:package` → `roku/out/HWVimeo.zip`.
 3. Sideload: see [docs/ROKU_SETUP.md](docs/ROKU_SETUP.md) (developer mode, installer page,
    `npm run roku:deploy`, debug console on port 8085).
